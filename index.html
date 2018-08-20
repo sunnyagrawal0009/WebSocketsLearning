@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+	var ws;
+	function open1()
+	{
+		var wsURL="ws://localhost:8080/SampleWebSockets/endpoint"
+		
+		
+		if(ws !== undefined && ws.readyState !== WebSocket.Closed)
+		{
+			write("Connection is already opened");
+			return;
+		}
+		
+		ws=new WebSocket(wsURL);
+	
+		ws.onOpen = function(event){
+			if(event.data === undefined)
+			return;
+			
+			write(event.data);
+		}
+		
+		ws.onmessage= function(event){
+			write(event.data);
+		}
+		
+		ws.onclose=function(event){
+			write("Connection Closed");
+		}
+	}
+	function send1() {
+		var data =document.getElementById("wstext").value;
+		alert(data);
+		ws.send(data);
+	}
+	
+	function close1(){
+	 ws.close();
+	}
+	
+	function write(test)
+	{
+		 document.getElementById("test").innerHTML+= "<br/>"+test;
+	}
+</script>
+</head>
+<body>
+	
+	<input type="text" id="wstext">
+	<input type="button" value="Open" onclick="open1()">
+	<input type="button" value="Send" onclick="send1()">
+	<input type="button" value="Close" onclick="close1()">
+	
+	<div id="test"></div>
+	
+</body>
+</html>
